@@ -8,7 +8,7 @@ def Pic_save(path,url):
     with open(path,'wb') as f:
         f.write(respone.content)
 
-def each(url,path_z):
+def each(url,path_z,Num):
     url_pic = []
     
     browser = webdriver.Firefox()
@@ -21,7 +21,7 @@ def each(url,path_z):
     
     pageNum = (len(browser.find_elements_by_tag_name('option')) - 6) / 2
     pageNum = int(pageNum)
-    # print(pageNum)
+    print(pageNum)
 
     name_div = soup.find('div',attrs={'class':'mh_readtitle'})
     name = (name_div.find('strong')).get_text()
@@ -49,7 +49,7 @@ def each(url,path_z):
             pageNum_c = '000' + str(i + 1)
         else:
             pageNum_c = '00' + str(i + 1)
-        Pic_url = 'http://img.mljzmm.com/comic/14339/' + s + '/' + pageNum_c + '.jpg'
+        Pic_url = 'http://img.mljzmm.com/comic/' + Num + '/' + s + '/' + pageNum_c + '.jpg'
         # print(Pic_url)
         Pic_save(path_s + pageNum_c + '.jpg',Pic_url)
         
@@ -57,7 +57,7 @@ def each(url,path_z):
     print(name + '保存完毕！')
     browser.quit()
 
-def mulu(base_url,path_a):
+def mulu(base_url,path_a,Num):
     url_list = []
     z_num = []
     # html = get_html(base_url)
@@ -79,14 +79,24 @@ def mulu(base_url,path_a):
         i = i + 1;
     print('共' + str(i - 1) + '章节，获取各章节地址成功！')
     for j in range(i):
-        # print(j)
-        # print(url_list[j])
-        each(url_list[j],path_z)
+        print(j)
+        print(url_list[j])
+        each(url_list[j],path_z,Num)
 
 def main():
     base_url = str(input('请输入漫画首页地址： \n'))
     path_a = 'f:\\ACG\\Comic\\'
-    mulu(base_url,path_a)
+    url_l = list(base_url)
+    s = ''
+    num = 0
+    for a in url_l:
+        if num == 3:
+            num = num + 1
+        if a == '/':
+            num = num + 1
+        if num > 3:
+            s = s + a
+    mulu(base_url,path_a,s)
 
 if __name__ == '__main__':
     main()
