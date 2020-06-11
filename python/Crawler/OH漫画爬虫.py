@@ -94,6 +94,8 @@ def main():
             num = num + 1
         if a == '/':
             num = num + 1
+        if num == 5:
+            break;
         if num > 3:
             s = s + a
     mulu(base_url,path_a,s)
